@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Kiosk {
+  id            String     @id
+  status        String     @default("OFFLINE")
+  lastHeartbeat DateTime?  @map("last_heartbeat")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  logs          DailyLog[]
+
+  @@map("kiosks")
+}
+
+enum WaterType {
+  COMMERCIAL
+  SUBSIDIZED
+}
+
+model DailyLog {
+  id            String  @id @default(uuid())
+  transactionId String  @unique @map("transaction_id")
+  kioskId       String  @map("kiosk_id")
+  operatorId    String? @map("operator_id") // User Story05
+
+  meterVolume     Float   @map("meter_volume")
+  reportedCash    Float   @map("reported_cash")
+  expectedRevenue Float   @map("expected_revenue")
+  variance        Float   @map("variance")
+  isAnomaly       Boolean @default(false) @map("is_anomaly")
+
+  proofImageUrl String?   @map("proof_image_url") // User Story 05
+  checksum      String?
+  waterType     WaterType @default(COMMERCIAL) @map("water_type") // User Story 09
+
+  isSynced        Boolean @default(true) @map("is_synced")
+  isReadByManager Boolean @default(false) @map("is_read_by_manager") // User Story 08 to check the manager open to check it or not.
+
+  recordedAt DateTime @map("recorded_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  kiosk Kiosk @relation(fields: [kioskId], references: [id])
+
+  // Story 08: Composite Index For Pagination pull to old data and prevent to block Real-time.
+  @@index([kioskId, recordedAt(sort: Desc)])
+  @@map("daily_logs")
+}

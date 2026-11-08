@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm-cache/
+
+# Test output
+coverage/
+.nyc_output/
+*.log
+
+# Environment and secrets — never commit these
+.env
+.env.*
+!.env.example
+*service-account*.json
+google-credentials*.json
+*.pem
+secrets/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
