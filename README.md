@@ -174,7 +174,8 @@ oxlint · Docker Compose**.
 
 ## Quick start
 
-Requires Node.js 22+ and Docker.
+Requires **Node.js 24+** and Docker. NestJS 12 ships as ES modules, so Node 24's native
+`require(esm)` support is required — on Node 22 the test run fails to load `@nestjs/common`.
 
 ```bash
 npm install

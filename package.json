@@ -5,6 +5,9 @@
   "author": "Daranpob Sianghen",
   "private": true,
   "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "build": "nest build",
     "deploy": "nest deploy",
